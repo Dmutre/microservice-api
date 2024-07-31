@@ -8,6 +8,6 @@ export default class UserController {
 
   @MessagePattern({ cmd: 'hello' })
   hello() {
-    return 'Hello';
+    return this.userService.hello();
   }
 }

@@ -1,4 +1,6 @@
+import { Transport } from '@nestjs/microservices';
 import * as process from 'process';
+import { MAIL_SERVICE } from 'src/utils/consts/services.consts';
 
 export default () => ({
   port: parseInt(process.env.PORT, 10),
@@ -13,5 +15,15 @@ export default () => ({
   jwt: {
     refreshTtl: process.env.REFRESH_TTL,
     secret: process.env.JWT_SECRET,
+  },
+  mailService: {
+    transport: Transport.RMQ,
+    options: {
+      urls: [process.env.RMQ_URL],
+      queue: process.env.QUEUE_NAME,
+      queueOptions: {
+        durable: false,
+      },
+    },
   },
 });

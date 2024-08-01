@@ -1,6 +1,5 @@
 import { Transport } from '@nestjs/microservices';
 import * as process from 'process';
-import { MAIL_SERVICE } from 'src/utils/consts/services.consts';
 
 export default () => ({
   port: parseInt(process.env.PORT, 10),

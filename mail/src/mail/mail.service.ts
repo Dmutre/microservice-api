@@ -28,7 +28,7 @@ export default class MailService {
   async sendEmailVerification(data: EmailTokenDTO) {
     const link: string = `${this.mailConfig.frontendUrl}/email/verify/${data.token}`;
     const message: string = 'Verify your email';
-    const subject: string = 'Email verification'
+    const subject: string = 'Email verification';
     await this.send({ to: data.email, link, message, subject });
   }
 }

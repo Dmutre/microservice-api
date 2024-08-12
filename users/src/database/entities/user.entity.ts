@@ -53,9 +53,9 @@ export class User {
   @OneToMany(() => Token, (token) => token.user)
   tokens: Token[];
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamptz' })
   updatedAt: Date;
 }

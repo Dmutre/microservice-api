@@ -79,8 +79,6 @@ export default class UserService {
       TokenType.EMAIL_VERIFICATION_TOKEN,
     );
 
-    throw new MicroserviceException('Microservice exception', HttpStatus.BAD_GATEWAY)
-
     const token = this.tokenRepo.create({
       user,
       value: v4(),

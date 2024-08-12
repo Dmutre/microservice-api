@@ -24,7 +24,7 @@ export class Token {
   @Column({ type: 'text', nullable: false })
   value: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;
 
   @ManyToOne(() => User, (user) => user.tokens)

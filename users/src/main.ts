@@ -2,9 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import ConfigurationService from './config/config.service';
-import { HttpStatus, ValidationPipe } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { AllExceptionsFilter } from './utils/filters/all-exception.filter';
-import { MicroserviceException } from './utils/exceptions/microservice.exception';
 import { validationExceptionFactory } from './utils/exception-factories/validation.exception-factory';
 
 async function bootstrap() {

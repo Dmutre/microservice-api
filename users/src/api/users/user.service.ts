@@ -4,7 +4,7 @@ import { MAIL_SERVICE } from '../../utils/consts/services.consts';
 import { RegisterUserDTO } from './dto/register-user.dto';
 import * as bcrypt from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from '../../database/entities/user.entity';
+import { EmailState, User } from '../../database/entities/user.entity';
 import { Repository } from 'typeorm';
 import { MicroserviceException } from '../../utils/exceptions/microservice.exception';
 import { JwtService } from '@nestjs/jwt';
@@ -12,8 +12,10 @@ import { JwtPayload } from '../../utils/interfaces/jwt.payload';
 import { Tokens } from '../../utils/interfaces/tokens';
 import JwtConfig from '../../config/jwt.config';
 import { Token, TokenType } from '../../database/entities/token.entity';
-import { MINUTE } from '../../utils/consts/global';
+import { MINUTE, WEEK } from '../../utils/consts/global';
 import { v4 } from 'uuid';
+import { TokenDTO } from './dto/email-token.dto';
+import { LoginDTO } from './dto/login.dto';
 
 @Injectable()
 export default class UserService {
@@ -112,5 +114,59 @@ export default class UserService {
         HttpStatus.BAD_REQUEST,
       );
     }
+  }
+
+  async verifyUserEmail({ token }: TokenDTO) {
+    const dbToken = await this.tokenRepo.findOne({
+      where: { value: token },
+      relations: ['user'],
+    });
+    if (!dbToken)
+      throw new MicroserviceException('Invalid token', HttpStatus.BAD_REQUEST);
+    console.log(dbToken);
+
+    this.checkTokenExpiration(dbToken);
+
+    this.userRepo.update(dbToken.user, { emailState: EmailState.APPROVED });
+
+    const user = await this.userRepo.findOneBy({ id: dbToken.user.id });
+    if (!user)
+      throw new MicroserviceException('User not found', HttpStatus.NOT_FOUND);
+
+    return await this.generateTokens(user);
+  }
+
+  private checkTokenExpiration(token: Token) {
+    if (Date.now() - token.createdAt.getTime() > WEEK)
+      throw new MicroserviceException(
+        'Token expired, repeat email verify request',
+        HttpStatus.BAD_REQUEST,
+      );
+  }
+
+  async login({ email, password }: LoginDTO) {
+    const user = await this.userRepo.findOneBy({ email });
+    if (!user)
+      throw new MicroserviceException('Incorrect email', HttpStatus.NOT_FOUND);
+
+    await this.checkUserCredentials(user, password);
+    return await this.generateTokens(user);
+  }
+
+  private async checkUserCredentials(user: User, password: string) {
+    const notFoundException = new MicroserviceException(
+      'User with such credentials was not found',
+      HttpStatus.NOT_FOUND,
+    );
+
+    if (!user) throw notFoundException;
+    if (user.emailState !== 'APPROVED')
+      throw new MicroserviceException(
+        'Account not verified',
+        HttpStatus.FORBIDDEN,
+      );
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) throw notFoundException;
   }
 }

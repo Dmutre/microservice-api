@@ -1,6 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import ConfigurationService from './config/configuration.service';
+import { ValidationPipe } from '@nestjs/common';
+import { AllExceptionsFilter } from './utils/filters/all-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -12,7 +14,11 @@ async function bootstrap() {
     AppModule,
     microserviceOptions,
   );
+  microservice.useGlobalPipes(new ValidationPipe());
+  microservice.useGlobalFilters(new AllExceptionsFilter());
 
-  await microservice.listen().then(() => console.log(`RMQ server started`));
+  await microservice
+    .listen()
+    .then(() => console.log(`RMQ mail server started`));
 }
 bootstrap();

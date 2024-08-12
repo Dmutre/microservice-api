@@ -5,15 +5,19 @@ import { ConfigService } from '@nestjs/config';
 export default class MailConfig {
   constructor(private readonly configService: ConfigService) {}
 
-  get host() {
+  get host(): string {
     return this.configService.get<string>('mail.host');
   }
 
-  get password() {
+  get password(): string {
     return this.configService.get<string>('mail.password');
   }
 
-  get username() {
+  get username(): string {
     return this.configService.get<string>('mail.username');
+  }
+
+  get frontendUrl(): string {
+    return this.configService.get<string>('mail.frontendUrl');
   }
 }

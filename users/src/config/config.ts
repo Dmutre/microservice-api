@@ -12,6 +12,7 @@ export default () => ({
     name: process.env.DB_NAME,
   },
   jwt: {
+    accessTttl: process.env.ACCESS_TTL,
     refreshTtl: process.env.REFRESH_TTL,
     secret: process.env.JWT_SECRET,
   },

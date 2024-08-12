@@ -9,7 +9,6 @@ import {
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
   catch(exception: any, host: ArgumentsHost) {
-    console.log(exception);
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
     const request = ctx.getRequest();
@@ -26,9 +25,9 @@ export class AllExceptionsFilter implements ExceptionFilter {
     } else if (
       typeof exception === 'object' &&
       'message' in exception &&
-      'statusCode' in exception
+      'error' in exception
     ) {
-      status = exception.statusCode;
+      status = exception.error.status;
       message = { message: exception.message };
     }
 

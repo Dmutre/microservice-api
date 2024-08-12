@@ -4,6 +4,7 @@ import config from './config';
 import DatabaseConfig from './database.config';
 import ConfigurationService from './config.service';
 import MailConfig from './mail.config';
+import JwtConfig from './jwt.config';
 
 @Module({
   imports: [
@@ -11,7 +12,7 @@ import MailConfig from './mail.config';
       load: [config],
     }),
   ],
-  providers: [DatabaseConfig, ConfigurationService, MailConfig],
-  exports: [DatabaseConfig, ConfigurationService, MailConfig],
+  providers: [DatabaseConfig, ConfigurationService, MailConfig, JwtConfig],
+  exports: [DatabaseConfig, ConfigurationService, MailConfig, JwtConfig],
 })
 export default class ConfigurationModule {}

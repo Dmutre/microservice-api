@@ -1,14 +1,14 @@
-import { Controller } from "@nestjs/common";
-import { EventPattern } from "@nestjs/microservices";
+import { Controller } from '@nestjs/common';
+import { EventPattern } from '@nestjs/microservices';
+import MailService from './mail.service';
+import { EmailTokenDTO } from './dto/email-token.dto';
 
 @Controller()
 export default class MailController {
-
-  constructor() {}
+  constructor(private readonly mailService: MailService) {}
 
   @EventPattern('email_verification')
-  emailVerification() {
-    console.log('We are here, PEREMOGA');
-    return;
+  async emailVerification(data: EmailTokenDTO) {
+    await this.mailService.sendEmailVerification(data);
   }
 }

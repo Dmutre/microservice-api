@@ -11,6 +11,11 @@ import {
 import { Role } from './role.entity';
 import { Token } from './token.entity';
 
+export enum EmailState {
+  APPROVED = 'APPROVED',
+  PENDING = 'PENDING',
+}
+
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
@@ -21,6 +26,9 @@ export class User {
 
   @Column({ type: 'varchar', nullable: false, unique: true })
   email: string;
+
+  @Column({ type: 'enum', enum: EmailState, default: EmailState.PENDING })
+  emailState: EmailState;
 
   @Column({ type: 'varchar', nullable: false })
   password: string;

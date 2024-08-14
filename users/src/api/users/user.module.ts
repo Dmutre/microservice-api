@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import UserController from './user.controller';
 import UserService from './user.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { ClientsModule } from '@nestjs/microservices';
 import { MAIL_SERVICE } from '../../utils/consts/services.consts';
 import MailConfig from '../../config/mail.config';
@@ -12,6 +11,7 @@ import { Role } from '../../database/entities/role.entity';
 import { Permission } from '../../database/entities/permission.entity';
 import { JwtModule } from '@nestjs/jwt';
 import JwtConfig from '../../config/jwt.config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   controllers: [UserController],

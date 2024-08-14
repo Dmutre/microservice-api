@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { DynamicModule, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import ConfigurationModule from '../config/configuration.module';
 import DatabaseConfig from '../config/database.config';
@@ -6,6 +6,8 @@ import { User } from './entities/user.entity';
 import { Token } from './entities/token.entity';
 import { Permission } from './entities/permission.entity';
 import { Role } from './entities/role.entity';
+import SeederService from './seeds/seeder.service';
+import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
 
 @Module({
   imports: [
@@ -24,6 +26,6 @@ import { Role } from './entities/role.entity';
       }),
     }),
   ],
-  exports: [TypeOrmModule],
+  providers: [SeederService],
 })
 export default class DatabaseModule {}

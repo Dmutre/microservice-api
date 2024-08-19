@@ -6,6 +6,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AllExceptionsFilter } from './utils/filters/rcp-exception-filter';
 import { Logger } from 'nestjs-pino';
 import { LoggingInterceptor } from './utils/interceptor/logging.interceptor';
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -20,12 +21,12 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api', app, document);
 
+  app.use(cookieParser());
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
     }),
   );
-
   app.useGlobalFilters(new AllExceptionsFilter());
   app.useLogger(app.get(Logger));
   app.useGlobalInterceptors(new LoggingInterceptor());

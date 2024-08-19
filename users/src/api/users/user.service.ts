@@ -22,6 +22,7 @@ import { v4 } from 'uuid';
 import { TokenDTO } from './dto/email-token.dto';
 import { LoginDTO } from './dto/login.dto';
 import { rolesList } from 'src/database/seeds/data/roles.consts';
+import { Role } from 'src/database/entities/role.entity';
 
 @Injectable()
 export default class UserService {
@@ -29,6 +30,7 @@ export default class UserService {
     @Inject(MAIL_SERVICE) private readonly mailClient: ClientProxy,
     @InjectRepository(User) private readonly userRepo: Repository<User>,
     @InjectRepository(Token) private readonly tokenRepo: Repository<Token>,
+    @InjectRepository(Role) private readonly roleRepo: Repository<Role>,
     private readonly jwtService: JwtService,
     private readonly jwtConfig: JwtConfig,
   ) {}
@@ -43,9 +45,10 @@ export default class UserService {
 
     data.password = await this.hashPassword(data.password);
 
+    const adminRole = await this.roleRepo.findOne({ where: { name: rolesList.ADMIN } });
     const newUser = await this.userRepo.create({
       ...data,
-      roles: [{ name: rolesList.ADMIN }],
+      roles: [adminRole],
     });
 
     await this.userRepo.save(newUser);
@@ -134,16 +137,17 @@ export default class UserService {
     });
     if (!dbToken)
       throw new MicroserviceException('Invalid token', HttpStatus.BAD_REQUEST);
-    console.log(dbToken);
 
     this.checkTokenExpiration(dbToken);
-
-    this.userRepo.update(dbToken.user, { emailState: EmailState.APPROVED });
 
     const user = await this.userRepo.findOneBy({ id: dbToken.user.id });
     if (!user)
       throw new MicroserviceException('User not found', HttpStatus.NOT_FOUND);
 
+    user.emailState = EmailState.APPROVED;
+    await this.userRepo.save(user);
+
+    await this.tokenRepo.delete({ id: dbToken.id });
     return await this.generateTokens(user);
   }
 
@@ -202,7 +206,7 @@ export default class UserService {
     return payload;
   }
 
-  async refresh(token: string) {
+  async refresh(token: string): Promise<Tokens> {
     const payload = await this.verifyToken(token);
     const user = await this.userRepo.findOne({ where: { id: payload.sub } });
     if (!user) throw new UnauthorizedException();

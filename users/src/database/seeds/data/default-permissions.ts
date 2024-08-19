@@ -1,9 +1,0 @@
-export const permissions = [
-  'GET_PRODUCTS',
-  'CREATE_PRODUCTS',
-  'UPDATE_PRODUCTS',
-  'DELETE_PRODUCTS',
-  'VIEW_ORDERS',
-  'EDIT_ORDERS',
-  'DELETE_ORDERS',
-];

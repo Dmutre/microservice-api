@@ -5,6 +5,7 @@ import ConfigurationService from './config/config.service';
 import { ValidationPipe } from '@nestjs/common';
 import { AllExceptionsFilter } from './utils/filters/all-exception.filter';
 import { validationExceptionFactory } from './utils/exception-factories/validation.exception-factory';
+import { Logger } from 'nestjs-pino';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -31,6 +32,7 @@ async function bootstrap() {
     }),
   );
   microservice.useGlobalFilters(new AllExceptionsFilter());
+  microservice.useLogger(microservice.get(Logger));
 
   await microservice
     .listen()

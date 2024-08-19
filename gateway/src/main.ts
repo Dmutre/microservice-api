@@ -4,6 +4,8 @@ import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AllExceptionsFilter } from './utils/filters/rcp-exception-filter';
+import { Logger } from 'nestjs-pino';
+import { LoggingInterceptor } from './utils/interceptor/logging.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -25,6 +27,8 @@ async function bootstrap() {
   );
 
   app.useGlobalFilters(new AllExceptionsFilter());
+  app.useLogger(app.get(Logger));
+  app.useGlobalInterceptors(new LoggingInterceptor());
 
   await app.listen(PORT, () => {
     console.log(`Gateway started on port ${PORT}`);

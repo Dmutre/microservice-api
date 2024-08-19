@@ -1,31 +1,26 @@
-import { DataSource } from 'typeorm';
+import { DataSource, In } from 'typeorm';
 import { Role } from '../entities/role.entity';
-import { Permission } from '../entities/permission.entity';
+import { Logger } from '@nestjs/common';
+import { rolesList } from './data/roles.consts';
 
 export default class RoleSeeder {
+  private readonly logger = new Logger('RoleSeeder');
+
   public async run(dataSource: DataSource): Promise<void> {
     const roleRepository = dataSource.getRepository(Role);
-    const permissionRepository = dataSource.getRepository(Permission);
-
-    let adminRole = await roleRepository.findOne({
-      where: { name: 'Admin' },
-      relations: ['permissions'],
+    const rolesNames = Object.keys(rolesList);
+    const rolesDb = await roleRepository.find({
+      where: {
+        name: In(rolesNames),
+      },
     });
-
-    if (!adminRole) {
-      adminRole = new Role();
-      adminRole.name = 'Admin';
-      adminRole.permissions = [];
-      await roleRepository.save(adminRole);
+    for (const role of rolesNames) {
+      if (!rolesDb.find((roleDb) => roleDb.name === role)) {
+        const newRole = await new Role();
+        newRole.name = role;
+        await roleRepository.save(newRole);
+      }
     }
-
-    const permissions = await permissionRepository.find();
-
-    const newPermissions = permissions.filter(permission => !adminRole.permissions.some(p => p.id === permission.id));
-
-    if (newPermissions.length > 0) {
-      adminRole.permissions = [...adminRole.permissions, ...newPermissions];
-      await roleRepository.save(adminRole);
-    }
+    this.logger.log('Roles have been seeded');
   }
 }

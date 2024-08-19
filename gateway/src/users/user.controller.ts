@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { RegisterUserDTO } from './dto/register-user.dto';
 import { EmailDTO } from './dto/email.dto';
@@ -9,6 +17,7 @@ import { CookieUtils } from 'src/utils/cookie-utils';
 import { Tokens } from 'src/utils/interfaces/tokens';
 import { lastValueFrom } from 'rxjs';
 import { TokenDTO } from './dto/token.dto';
+import { AuthGuard } from 'src/security/auth.guard';
 
 @ApiTags('Authorization')
 @Controller('users')
@@ -67,6 +76,7 @@ export default class UserController {
     return { token: tokens.accessToken };
   }
 
+  @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get current user from token' })
   @Get('/me')
   async getCurrentUser(@Req() request: Request) {

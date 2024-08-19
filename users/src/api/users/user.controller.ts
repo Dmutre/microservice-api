@@ -6,6 +6,7 @@ import { EmailDTO } from './dto/email.dto';
 import { TokenDTO } from './dto/email-token.dto';
 import { Tokens } from 'src/utils/interfaces/tokens';
 import { LoginDTO } from './dto/login.dto';
+import { UserPermissionCheckDTO } from './dto/user-permission-check.dto';
 
 @Controller('users')
 export default class UserController {
@@ -42,5 +43,10 @@ export default class UserController {
   @MessagePattern({ cmd: 'get_current_user' })
   async getCurrentUser({ token }: TokenDTO) {
     return this.userService.validateUserToken(token);
+  }
+
+  @MessagePattern({ cmd: 'check_user_permission' })
+  async checkUserPermission(data: UserPermissionCheckDTO) {
+    return this.userService.checkUserPermission(data);
   }
 }

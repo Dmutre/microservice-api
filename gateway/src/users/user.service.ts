@@ -7,6 +7,7 @@ import { EmailDTO } from './dto/email.dto';
 import { LoginDTO } from './dto/login.dto';
 import { Request } from 'express';
 import { TokenDTO } from './dto/token.dto';
+import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export default class UserService {
@@ -44,5 +45,18 @@ export default class UserService {
 
   getCurrentUser(token: string) {
     return this.userClient.send(UserMessagePattern.GET_CURRENT_USER, { token });
+  }
+
+  async checkUserPermission(
+    userId: string,
+    permissions: string[],
+  ): Promise<boolean> {
+    const response = await lastValueFrom(
+      this.userClient.send(UserMessagePattern.CHECK_DOES_USER_HAVE_PERMISSION, {
+        userId,
+        permissions,
+      }),
+    );
+    return response.isAllowed;
   }
 }

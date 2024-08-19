@@ -2,6 +2,7 @@ import {
   HttpStatus,
   Inject,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
@@ -23,6 +24,7 @@ import { TokenDTO } from './dto/email-token.dto';
 import { LoginDTO } from './dto/login.dto';
 import { rolesList } from 'src/database/seeds/data/roles.consts';
 import { Role } from 'src/database/entities/role.entity';
+import { UserPermissionCheckDTO } from './dto/user-permission-check.dto';
 
 @Injectable()
 export default class UserService {
@@ -212,5 +214,24 @@ export default class UserService {
     if (!user) throw new UnauthorizedException();
 
     return await this.generateTokens(user);
+  }
+
+  async checkUserPermission(data: UserPermissionCheckDTO) {
+    const user = await this.userRepo.findOne({
+      where: { id: data.userId },
+      relations: ['roles', 'roles.permissions'],
+    });
+
+    if (!user) throw new NotFoundException('User not found');
+
+    const userPermissions = new Set<string>();
+    user.roles.forEach(role => {
+      role.permissions.forEach(permission => {
+        userPermissions.add(permission.name);
+      });
+    });
+
+    const havePermission: boolean = data.permissions.every(perm => userPermissions.has(perm));
+    return { isAllowed: havePermission };
   }
 }

@@ -5,4 +5,5 @@ export const UserMessagePattern = {
   LOGIN_USER: { cmd: 'user_login' },
   GET_CURRENT_USER: { cmd: 'get_current_user' },
   REFRESH_TOKEN: { cmd: 'refresh_token' },
+  CHECK_DOES_USER_HAVE_PERMISSION: { cmd: 'check_user_permission' },
 };

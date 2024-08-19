@@ -33,4 +33,14 @@ export default class UserController {
   async login(data: LoginDTO) {
     return this.userService.login(data);
   }
+
+  @MessagePattern({ cmd: 'refresh_token' })
+  async refreshToken({ token }: TokenDTO) {
+    return this.userService.refresh(token);
+  }
+
+  @MessagePattern({ cmd: 'get_current_user' })
+  async getCurrentUser({ token }: TokenDTO) {
+    return this.userService.validateUserToken(token);
+  }
 }

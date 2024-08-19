@@ -1,4 +1,9 @@
-import { HttpStatus, Inject, Injectable } from '@nestjs/common';
+import {
+  HttpStatus,
+  Inject,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { MAIL_SERVICE } from '../../utils/consts/services.consts';
 import { RegisterUserDTO } from './dto/register-user.dto';
@@ -16,6 +21,7 @@ import { MINUTE, WEEK } from '../../utils/consts/global';
 import { v4 } from 'uuid';
 import { TokenDTO } from './dto/email-token.dto';
 import { LoginDTO } from './dto/login.dto';
+import { rolesList } from 'src/database/seeds/data/roles.consts';
 
 @Injectable()
 export default class UserService {
@@ -37,7 +43,12 @@ export default class UserService {
 
     data.password = await this.hashPassword(data.password);
 
-    await this.userRepo.save(data);
+    const newUser = await this.userRepo.create({
+      ...data,
+      roles: [{ name: rolesList.ADMIN }],
+    });
+
+    await this.userRepo.save(newUser);
     return { message: 'User successfuly registrated' };
   }
 
@@ -168,5 +179,34 @@ export default class UserService {
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) throw notFoundException;
+  }
+
+  async validateUserToken(token: string) {
+    if (!token) throw new UnauthorizedException();
+
+    const payload = await this.verifyToken(token);
+    const user = await this.userRepo.findOne({
+      where: { id: payload.sub },
+      relations: ['roles'],
+    });
+    delete user.password;
+    return user;
+  }
+
+  private async verifyToken(token: string): Promise<JwtPayload> {
+    const payload: JwtPayload = await this.jwtService
+      .verifyAsync(token, { secret: this.jwtConfig.secret })
+      .catch(() => {
+        throw new UnauthorizedException();
+      });
+    return payload;
+  }
+
+  async refresh(token: string) {
+    const payload = await this.verifyToken(token);
+    const user = await this.userRepo.findOne({ where: { id: payload.sub } });
+    if (!user) throw new UnauthorizedException();
+
+    return await this.generateTokens(user);
   }
 }

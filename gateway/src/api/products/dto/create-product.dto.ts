@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsNotEmpty,
   IsNumber,
@@ -5,23 +6,22 @@ import {
   IsString,
   Min,
 } from 'class-validator';
-import { ProductActionDTO } from './product-action.dto';
 
-export class UpdateProductDTO extends ProductActionDTO {
+export class CreateProductDTO {
+  @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  @IsOptional()
   title: string;
 
+  @ApiProperty()
   @IsString()
   @IsOptional()
   description?: string;
 
+  @ApiProperty()
   @IsNumber()
   @Min(0)
-  @IsOptional()
   price: number;
 
-  @IsOptional()
-  photo: any;
+  userId: string;
 }

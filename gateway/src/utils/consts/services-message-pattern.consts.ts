@@ -7,3 +7,10 @@ export const UserMessagePattern = {
   REFRESH_TOKEN: { cmd: 'refresh_token' },
   CHECK_DOES_USER_HAVE_PERMISSION: { cmd: 'check_user_permission' },
 };
+
+export const ProductMessagePattern = {
+  CREATE_PRODUCT: { cmd: 'create_product' },
+  UPDATE_PRODUCT: { cmd: 'update_product' },
+  GET_PRODUCTS: { cmd: 'get_products' },
+  DELETE_PRODUCT: { cmd: 'delete_products' },
+};

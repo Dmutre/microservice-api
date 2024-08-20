@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import config from './config/config';
-import UserModule from './users/user.module';
+import UserModule from './api/users/user.module';
 import { LoggerModule as PinoLoggerModule } from 'nestjs-pino';
+import ProductModule from './api/products/product.module';
 
 @Module({
   imports: [
@@ -10,6 +11,7 @@ import { LoggerModule as PinoLoggerModule } from 'nestjs-pino';
       load: [config],
     }),
     UserModule,
+    ProductModule,
     PinoLoggerModule.forRoot({
       pinoHttp: {
         transport: {

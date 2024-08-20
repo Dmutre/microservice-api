@@ -6,8 +6,15 @@ export default () => ({
   userServiceConfig: {
     transport: Transport.TCP,
     options: {
-      port: process.env.USER_PORT,
+      port: parseInt(process.env.USER_PORT, 10),
       host: process.env.USER_HOST,
+    },
+  },
+  productServiceConfig: {
+    transport: Transport.TCP,
+    options: {
+      port: parseInt(process.env.PRODUCT_PORT, 10),
+      host: process.env.PRODUCT_HOST,
     },
   },
 });

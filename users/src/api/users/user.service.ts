@@ -47,7 +47,9 @@ export default class UserService {
 
     data.password = await this.hashPassword(data.password);
 
-    const adminRole = await this.roleRepo.findOne({ where: { name: rolesList.ADMIN } });
+    const adminRole = await this.roleRepo.findOne({
+      where: { name: rolesList.ADMIN },
+    });
     const newUser = await this.userRepo.create({
       ...data,
       roles: [adminRole],
@@ -225,13 +227,15 @@ export default class UserService {
     if (!user) throw new NotFoundException('User not found');
 
     const userPermissions = new Set<string>();
-    user.roles.forEach(role => {
-      role.permissions.forEach(permission => {
+    user.roles.forEach((role) => {
+      role.permissions.forEach((permission) => {
         userPermissions.add(permission.name);
       });
     });
 
-    const havePermission: boolean = data.permissions.every(perm => userPermissions.has(perm));
+    const havePermission: boolean = data.permissions.every((perm) =>
+      userPermissions.has(perm),
+    );
     return { isAllowed: havePermission };
   }
 }

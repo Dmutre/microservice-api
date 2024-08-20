@@ -20,5 +20,6 @@ import { ClientOptions, ClientProxyFactory } from '@nestjs/microservices';
   ],
   controllers: [UserController],
   imports: [ConfigModule],
+  exports: [UserService],
 })
 export default class UserModule {}

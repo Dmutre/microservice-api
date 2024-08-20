@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { lastValueFrom } from 'rxjs';
-import UserService from 'src/users/user.service';
+import UserService from 'src/api/users/user.service';
 import { User } from 'src/utils/entities/user.entity';
 
 @Injectable()
@@ -24,7 +24,9 @@ export class AuthGuard implements CanActivate {
     }
     const user: User = await lastValueFrom(
       await this.authService.getCurrentUser(token),
-    );
+    ).catch(() => {
+      throw new UnauthorizedException();
+    });
     if (!user) {
       throw new UnauthorizedException('Token is not valid');
     }

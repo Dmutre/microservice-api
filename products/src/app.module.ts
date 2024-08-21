@@ -8,6 +8,8 @@ import ProductModule from './products/product.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
+      envFilePath:
+        process.env.NODE_ENV === 'production' ? '.env' : '.env.development',
       load: [config],
     }),
     DatabaseModule,

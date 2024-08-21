@@ -9,6 +9,8 @@ import JwtConfig from './jwt.config';
 @Module({
   imports: [
     ConfigModule.forRoot({
+      envFilePath:
+        process.env.NODE_ENV === 'production' ? '.env' : '.env.development',
       load: [config],
     }),
   ],

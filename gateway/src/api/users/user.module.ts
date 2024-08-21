@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import UserService from './user.service';
 import UserController from './user.controller';
-import { USER_SERVICE } from 'src/utils/consts/services.consts';
+import { USER_SERVICE } from '../../utils/consts/services.consts';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientOptions, ClientProxyFactory } from '@nestjs/microservices';
 

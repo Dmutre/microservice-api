@@ -11,12 +11,12 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import ProductService from './product.service';
-import { AuthGuard } from 'src/security/auth.guard';
-import { PermissionsGuard } from 'src/security/permission.guard';
-import { Permissions } from 'src/security/permission.decorator';
-import { permissionsList } from 'src/utils/consts/permissions.consts';
-import { CurrentUser } from 'src/utils/decorators/current-user.decorator';
-import { User } from 'src/utils/entities/user.entity';
+import { AuthGuard } from '../../security/auth.guard';
+import { PermissionsGuard } from '../../security/permission.guard';
+import { Permissions } from '../../security/permission.decorator';
+import { permissionsList } from '../../utils/consts/permissions.consts';
+import { CurrentUser } from '../../utils/decorators/current-user.decorator';
+import { User } from '../../utils/entities/user.entity';
 import { CreateProductDTO } from './dto/create-product.dto';
 import { UpdateProductDTO } from './dto/update-product.dto';
 

@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { PRODUCT_SERVICE } from 'src/utils/consts/services.consts';
+import { PRODUCT_SERVICE } from '../../utils/consts/services.consts';
 import { CreateProductDTO } from './dto/create-product.dto';
-import { ProductMessagePattern } from 'src/utils/consts/services-message-pattern.consts';
+import { ProductMessagePattern } from '../../utils/consts/services-message-pattern.consts';
 import { UpdateProductDTO } from './dto/update-product.dto';
 import { GetProductsDTO } from './dto/get-products.dto';
 import { ProductActionDTO } from './dto/product-action.dto';

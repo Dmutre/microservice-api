@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { EmailTokenDTO } from './dto/email-token.dto';
 import { MailOptionsDto } from './dto/mail-options.dto';
 import { MailerService } from '@nestjs-modules/mailer';
-import MailConfig from 'src/config/mail.config';
+import MailConfig from '../config/mail.config';
 import { resolve } from 'path';
 
 @Injectable()

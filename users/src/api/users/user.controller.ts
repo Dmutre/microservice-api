@@ -4,7 +4,7 @@ import { MessagePattern } from '@nestjs/microservices';
 import { RegisterUserDTO } from './dto/register-user.dto';
 import { EmailDTO } from './dto/email.dto';
 import { TokenDTO } from './dto/email-token.dto';
-import { Tokens } from 'src/utils/interfaces/tokens';
+import { Tokens } from '../../utils/interfaces/tokens';
 import { LoginDTO } from './dto/login.dto';
 import { UserPermissionCheckDTO } from './dto/user-permission-check.dto';
 

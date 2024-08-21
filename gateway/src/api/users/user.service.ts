@@ -1,7 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { UserMessagePattern } from 'src/utils/consts/services-message-pattern.consts';
-import { USER_SERVICE } from 'src/utils/consts/services.consts';
+import { UserMessagePattern } from '../../utils/consts/services-message-pattern.consts';
+import { USER_SERVICE } from '../../utils/consts/services.consts';
 import { RegisterUserDTO } from './dto/register-user.dto';
 import { EmailDTO } from './dto/email.dto';
 import { LoginDTO } from './dto/login.dto';

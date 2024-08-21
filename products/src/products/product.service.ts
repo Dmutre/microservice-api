@@ -1,11 +1,11 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Product } from 'src/database/entities/product.entity';
+import { Product } from '../database/entities/product.entity';
 import { Repository } from 'typeorm';
 import { CreateProductDTO } from './dto/create-product.dto';
 import { UpdateProductDTO } from './dto/update-product.dto';
 import { GetProductsDTO } from './dto/get-products.dto';
-import { MicroserviceException } from 'src/utils/exceptions/microservice.exception';
+import { MicroserviceException } from '../utils/exceptions/microservice.exception';
 import { ProductActionDTO } from './dto/product-action.dto';
 
 @Injectable()

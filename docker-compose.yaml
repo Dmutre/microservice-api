@@ -1,0 +1,62 @@
+services:
+  gateway:
+    build:
+      context: ./gateway
+      dockerfile: ./Dockerfile
+    env_file:
+    - ./gateway/.env
+    ports:
+      - '3000:3000'
+    depends_on:
+      - mail
+      - users
+      - products
+  mail:
+    build:
+      context: ./mail
+      dockerfile: ./Dockerfile
+    env_file:
+    - ./mail/.env
+    depends_on:
+      - rabbitmq
+  users:
+    build:
+      context: ./users
+      dockerfile: ./Dockerfile
+    env_file:
+    - ./users/.env
+    ports:
+      - '3001:3001'
+    depends_on:
+      - db
+      - rabbitmq
+  products:
+    build:
+      context: ./products
+      dockerfile: ./Dockerfile
+    env_file:
+    - ./products/.env
+    ports:
+      - '3004:3004'
+    depends_on:
+      - db
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - ./rabbitmq_data:/var/lib/rabbitmq
+  db:
+    image: postgres:13-alpine
+    container_name: 'postgres'
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_MULTIPLE_DATABASES: micro-user,micro-product
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+      - ./init-db.sh:/docker-entrypoint-initdb.d/init-db.sh

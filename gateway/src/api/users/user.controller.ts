@@ -13,11 +13,11 @@ import { EmailDTO } from './dto/email.dto';
 import UserService from './user.service';
 import { LoginDTO } from './dto/login.dto';
 import { Request, Response } from 'express';
-import { CookieUtils } from 'src/utils/cookie-utils';
-import { Tokens } from 'src/utils/interfaces/tokens';
+import { CookieUtils } from '../../utils/cookie-utils';
+import { Tokens } from '../../utils/interfaces/tokens';
 import { lastValueFrom } from 'rxjs';
 import { TokenDTO } from './dto/token.dto';
-import { AuthGuard } from 'src/security/auth.guard';
+import { AuthGuard } from '../../security/auth.guard';
 
 @ApiTags('Authorization')
 @Controller('users')

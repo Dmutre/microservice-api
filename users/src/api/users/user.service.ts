@@ -22,8 +22,8 @@ import { MINUTE, WEEK } from '../../utils/consts/global';
 import { v4 } from 'uuid';
 import { TokenDTO } from './dto/email-token.dto';
 import { LoginDTO } from './dto/login.dto';
-import { rolesList } from 'src/database/seeds/data/roles.consts';
-import { Role } from 'src/database/entities/role.entity';
+import { rolesList } from '../../database/seeds/data/roles.consts';
+import { Role } from '../../database/entities/role.entity';
 import { UserPermissionCheckDTO } from './dto/user-permission-check.dto';
 
 @Injectable()

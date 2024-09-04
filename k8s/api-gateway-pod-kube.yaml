@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: api-gateway-pod
+  labels:
+    name: api-gateway-pod
+    app: nestjs-microservice
+spec:
+  containers:
+    - name: api-gateway
+      image: dmutre/microservice-api-gateway
+      ports:
+        - containerPort: 3000
+      env:
+        - name: API_GATEWAY_PORT
+          value: "3000"
+        - name: USER_PORT
+          value: "3001"
+        - name: USER_HOST
+          value: "users"
+        - name: PRODUCT_PORT
+          value: "3004"
+        - name: PRODUCT_HOST
+          value: "products"
+        - name: REFRESH_COOKIE_TTL
+          value: "172800"

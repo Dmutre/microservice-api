@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: rabbitmq-pod
+  namespace: nestjs-microservices
+  labels:
+    app: nestjs-microservices
+    name: rabbitmq-pod
+spec:
+  containers:
+    - name: rabbitmq
+      image: rabbitmq:3-management
+      ports:
+        - containerPort: 5672
+        - containerPort: 15672
+      volumeMounts:
+        - name: rabbitmq-data
+          mountPath: /var/lib/rabbitmq
+  volumes:
+    - name: rabbitmq-data
+      hostPath:
+        path: ../rabbitmq_data

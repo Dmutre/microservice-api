@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: user-pod
+  labels:
+    name: user-pod
+    app: nestjs-microservice
+spec:
+  containers:
+    - name: user
+      image: dmutre/microservice-api-users
+      env:
+        - name: PORT
+          value: "3001"
+        - name: HOST
+          value: "0.0.0.0"
+        - name: QUEUE_NAME
+          value: "mail_queue"
+        - name: RMQ_URL
+          value: "amqp://rabbitmq:5672"
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_HOST
+          value: "db"
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              key: POSTGRES_USER
+              name: nestjs-microservices
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: DB_PASSWORD
+              name: nestjs-microservices
+        - name: DB_NAME
+          value: micro-user
+        - name: REFRESH_TTL
+          value: 172800s
+        - name: ACCESS_TTL
+          value: 7200s
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: JWT_SECRET
+              name: nestjs-microservices

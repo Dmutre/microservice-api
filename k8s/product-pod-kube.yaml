@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: product-pod
+  labels:
+    name: product-pod
+    app: nestjs-microservice
+spec:
+  containers:
+    - name: product
+      image: dmutre/microservice-api-products
+      env:
+        - name: PORT
+          value: "3004"
+        - name: HOST
+          value: 0.0.0.0
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_HOST
+          value: "db"
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              key: POSTGRES_USER
+              name: nestjs-microservices
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: DB_PASSWORD
+              name: nestjs-microservices
+        - name: DB_NAME
+          value: micro-product

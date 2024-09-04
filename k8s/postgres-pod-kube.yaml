@@ -10,13 +10,14 @@ spec:
   containers:
     - name: postgres
       image: postgres
-      command: ["/bin/bash", "../init-db.sh"]
       ports:
         - containerPort: 5432
       volumeMounts:
-        - name: postgres-volume
+        - name: postgres-pvc
           mountPath: /var/lib/postgresql/data
-          subPath: postgres-12.x.x-var-lib-postgresql-data
+        - name: initdb-script
+          mountPath: /docker-entrypoint-initdb.d/init-db.sh
+          subPath: init-db.sh
       env:
        - name: POSTGRES_USER
          valueFrom:
@@ -28,7 +29,10 @@ spec:
            secretKeyRef:
              name: nestjs-microservices
              key: POSTGRES_PASSWORD
-      volumes:
-      - name: postgres-volume
-        persistentVolumeClaim:
-          claimName: postgres-pvc
+  volumes:
+  - name: postgres-pvc
+    persistentVolumeClaim:
+      claimName: postgres-pvc
+  - name: initdb-script
+    configMap:
+      name: postgres-initdb

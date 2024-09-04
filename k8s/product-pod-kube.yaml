@@ -4,7 +4,7 @@ metadata:
   name: product-pod
   labels:
     name: product-pod
-    app: nestjs-microservice
+    app: nestjs-microservices
 spec:
   containers:
     - name: product
@@ -17,7 +17,7 @@ spec:
         - name: DB_PORT
           value: "5432"
         - name: DB_HOST
-          value: "db"
+          value: postgres-service
         - name: DB_USER
           valueFrom:
             secretKeyRef:
@@ -26,7 +26,7 @@ spec:
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
-              key: DB_PASSWORD
+              key: POSTGRES_PASSWORD
               name: nestjs-microservices
         - name: DB_NAME
           value: micro-product

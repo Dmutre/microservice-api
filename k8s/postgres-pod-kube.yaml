@@ -5,7 +5,7 @@ metadata:
   name: postgres-pod
   labels:
     name: postgres-pod
-    app: nestjs-microservice
+    app: nestjs-microservices
 spec:
   containers:
     - name: postgres

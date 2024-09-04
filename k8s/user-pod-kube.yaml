@@ -4,7 +4,7 @@ metadata:
   name: user-pod
   labels:
     name: user-pod
-    app: nestjs-microservice
+    app: nestjs-microservices
 spec:
   containers:
     - name: user
@@ -15,13 +15,13 @@ spec:
         - name: HOST
           value: "0.0.0.0"
         - name: QUEUE_NAME
-          value: "mail_queue"
+          value: mail_queue
         - name: RMQ_URL
-          value: "amqp://rabbitmq:5672"
+          value: amqp://rabbitmq-servive:5672
         - name: DB_PORT
           value: "5432"
         - name: DB_HOST
-          value: "db"
+          value: postgres-service
         - name: DB_USER
           valueFrom:
             secretKeyRef:
@@ -30,7 +30,7 @@ spec:
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
-              key: DB_PASSWORD
+              key: POSTGRES_PASSWORD
               name: nestjs-microservices
         - name: DB_NAME
           value: micro-user

@@ -4,7 +4,7 @@ metadata:
   name: api-gateway-pod
   labels:
     name: api-gateway-pod
-    app: nestjs-microservice
+    app: nestjs-microservices
 spec:
   containers:
     - name: api-gateway
@@ -17,10 +17,10 @@ spec:
         - name: USER_PORT
           value: "3001"
         - name: USER_HOST
-          value: "users"
+          value: user-service
         - name: PRODUCT_PORT
           value: "3004"
         - name: PRODUCT_HOST
-          value: "products"
+          value: product-service
         - name: REFRESH_COOKIE_TTL
           value: "172800"

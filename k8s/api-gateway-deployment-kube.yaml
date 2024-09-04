@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway-deployment
+  labels:
+    app: nestjs-microservices
+    tier: backend
+spec:
+  selector:
+    matchLabels:
+      name: api-gateway-pod
+      app: nestjs-microservices
+  replicas: 3
+  template:
+    metadata:
+      name: api-gateway-pod
+      labels:
+        name: api-gateway-pod
+        app: nestjs-microservices
+    spec:
+      containers:
+        - name: api-gateway
+          image: dmutre/microservice-api-gateway
+          ports:
+            - containerPort: 3000
+          env:
+            - name: API_GATEWAY_PORT
+              value: "3000"
+            - name: USER_PORT
+              value: "3001"
+            - name: USER_HOST
+              value: user-service
+            - name: PRODUCT_PORT
+              value: "3004"
+            - name: PRODUCT_HOST
+              value: product-service
+            - name: REFRESH_COOKIE_TTL
+              value: "172800"

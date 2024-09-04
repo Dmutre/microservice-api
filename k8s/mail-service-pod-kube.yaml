@@ -4,18 +4,18 @@ metadata:
   name: mail-pod
   labels:
     name: mail-pod
-    app: nestjs-microservice
+    app: nestjs-microservices
 spec:
   containers:
     - name: mail
       image: dmutre/microservice-api-mail
       env:
         - name: QUEUE_NAME
-          value: "mail_queue"
+          value: mail_queue
         - name: RMQ_URL
-          value: "amqp://rabbitmq:5672"
+          value: amqp://rabbitmq-service:5672
         - name: FRONTEND_URL
-          value: "http://localhost:3006"
+          value: http://localhost:3006
         - name: SMTP_HOST
           valueFrom:
             secretKeyRef:
